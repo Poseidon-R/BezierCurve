@@ -23,7 +23,7 @@ import android.view.animation.LinearInterpolator;
  *
  * @author majingze
  */
-public class WaveView extends View implements View.OnClickListener {
+public class WaveView extends View {
     //波浪画笔
     private Paint mPaint;
     //测试红点画笔
@@ -45,6 +45,12 @@ public class WaveView extends View implements View.OnClickListener {
     //屏幕宽度
     private int mScreenWidth;
 
+    private WaveState waveState = WaveState.HORIZONTAL;
+
+    private ValueAnimator animator;
+
+    private boolean isPlay = false;
+
     public WaveView(Context context) {
         super(context);
     }
@@ -55,11 +61,11 @@ public class WaveView extends View implements View.OnClickListener {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.GREEN);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        setOnClickListener(this);
         //用来绘制测试红点
         mCyclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCyclePaint.setColor(Color.TRANSPARENT);
         mCyclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        initAnim();
     }
 
     public WaveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -75,6 +81,26 @@ public class WaveView extends View implements View.OnClickListener {
         //加1.5：至少保证波纹有2个，至少2个才能实现平移效果
         mWaveCount = (int) Math.round(mScreenWidth / mWaveLength + 1.5);
         mCenterY = mScreenHeight / 2 + 500;
+    }
+    private void initAnim(){
+        animator = ValueAnimator.ofInt(0, mWaveLength);
+        animator.setDuration(1000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mOffset = (int) animation.getAnimatedValue();
+                if (waveState == WaveState.UP) {
+                    mCenterY -= 1;
+                } else if(waveState == WaveState.DOWN){
+                    mCenterY += 1;
+
+                }
+
+                postInvalidate();
+            }
+        });
     }
 
     @Override
@@ -100,20 +126,25 @@ public class WaveView extends View implements View.OnClickListener {
         canvas.drawPath(mPath, mPaint);
     }
 
-    @Override
-    public void onClick(View view) {
-        ValueAnimator animator = ValueAnimator.ofInt(0, mWaveLength);
-        animator.setDuration(1000);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mOffset = (int) animation.getAnimatedValue();
-//                mCenterY -= 1;
-                postInvalidate();
-            }
-        });
+    public void startAnim() {
+        if(isPlay)return;
         animator.start();
+        isPlay = true;
+    }
+
+    public void stop() {
+        if (!isPlay) {
+            return;
+        }
+        animator.pause();
+        isPlay = false;
+    }
+
+    public void up() {
+        waveState = WaveState.UP;
+    }
+
+    public void down() {
+        waveState = WaveState.DOWN;
     }
 }

@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="mainBtnStyle">
+        <item name="android:layout_width">130dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/main_btn_bg</item>
+    </style>
+
+    <style name="waveBtnStyle" parent="mainBtnStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
 </resources>

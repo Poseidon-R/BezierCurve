@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/handlerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/play"
+            style="@style/waveBtnStyle"
+            android:text="@string/play"/>
+        <TextView
+            android:id="@+id/pause"
+            style="@style/waveBtnStyle"
+            android:text="@string/pause"/>
+        <TextView
+            android:id="@+id/up"
+            style="@style/waveBtnStyle"
+            android:text="@string/up"/>
+        <TextView
+            android:id="@+id/down"
+            style="@style/waveBtnStyle"
+            android:text="@string/down"/>
+    </LinearLayout>
+    <com.example.zhangxiangzeng.beziercurveproject.WaveView
+        android:id="@+id/waveView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/handlerLayout"/>
+</RelativeLayout>
